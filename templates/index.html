@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activity Tracker</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Activity Tracker - Flask Edition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1><i class="fas fa-tasks"></i> Activity Tracker</h1>
-            <p>Track what you've accomplished today</p>
+            <h1><i class="fas fa-tasks"></i> Activity Tracker - Flask Edition</h1>
+            <p>Track what you've accomplished today (with auto-save to Git!)</p>
         </header>
 
         <main class="main-content">
@@ -29,7 +29,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="engineering_quantity" min="1" max="100" value="1">
+                                <input type="number" name="engineering_quantity" min="0" max="100" value="0">
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="algorithm_quantity" min="1" max="100" value="1">
+                                <input type="number" name="algorithm_quantity" min="0" max="100" value="0">
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="teknokian_quantity" min="1" max="100" value="1">
+                                <input type="number" name="teknokian_quantity" min="0" max="100" value="0">
                             </div>
                         </div>
 
@@ -65,7 +65,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="runner_quantity" min="1" max="100" value="1">
+                                <input type="number" name="runner_quantity" min="0" max="100" value="0">
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Liters:</label>
-                                <input type="number" name="water_quantity" min="0.5" max="10" step="0.1" value="2">
+                                <input type="number" name="water_quantity" min="0" max="100" step="0.1" value="0">
                             </div>
                         </div>
 
@@ -93,7 +93,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="eggs_quantity" min="1" max="20" value="2">
+                                <input type="number" name="eggs_quantity" min="0" max="200" value="0">
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="caffeine_quantity" min="1" max="10" value="1">
+                                <input type="number" name="caffeine_quantity" min="0" max="10" value="0">
                             </div>
                         </div>
 
@@ -125,7 +125,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="no_fear_quantity" min="1" max="10" value="1">
+                                <input type="number" name="no_fear_quantity" min="0" max="100" value="0">
                             </div>
                         </div>
 
@@ -137,7 +137,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="neem_tulsi_quantity" min="1" max="10" value="1">
+                                <input type="number" name="neem_tulsi_quantity" min="0" max="10" value="0">
                             </div>
                         </div>
 
@@ -149,16 +149,20 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="green_tea_quantity" min="1" max="20" value="1">
+                                <input type="number" name="green_tea_quantity" min="0" max="20" value="0">
                             </div>
                         </div>
 
                         <div class="activity-item">
                             <label class="activity-label">
-                                <input type="checkbox" name="activity" value="meals">
+                                <input type="checkbox" name="activity" value="meals" data-has-quantity="true">
                                 <span class="checkmark"></span>
                                 Meals
                             </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="meals_quantity" min="0" max="20" value="0">
+                            </div>
                         </div>
                     </div>
 
@@ -173,7 +177,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Hours:</label>
-                                <input type="number" name="sleep_quantity" min="1" max="12" step="0.5" value="8">
+                                <input type="number" name="sleep_quantity" min="0" max="12" step="0.5" value="0">
                             </div>
                         </div>
 
@@ -185,7 +189,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="podcast_quantity" min="1" max="20" value="1">
+                                <input type="number" name="podcast_quantity" min="0" max="20" value="0">
                             </div>
                         </div>
 
@@ -197,7 +201,7 @@
                             </label>
                             <div class="quantity-control hidden">
                                 <label>Amount:</label>
-                                <input type="number" name="finance_quantity" min="1" max="100" value="1">
+                                <input type="number" name="finance_quantity" min="0" max="100" value="0">
                             </div>
                         </div>
                     </div>
@@ -223,6 +227,6 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

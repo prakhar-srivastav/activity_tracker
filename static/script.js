@@ -17,7 +17,10 @@ function initializeApp() {
     form.addEventListener('submit', handleFormSubmit);
     
     // Load saved data if available
-    // loadSavedData();
+    loadSavedData();
+    
+    // Add git status checker
+    checkGitStatus();
 }
 
 function handleCheckboxChange(event) {
@@ -103,11 +106,9 @@ async function handleFormSubmit(event) {
         await saveData(data);
         showSummary(data);
         
-        // Auto-download JSON file for GitHub commit
-        downloadDataFile(data);
-        
-        showMessage('Activities saved! JSON file downloaded for GitHub commit 📁', 'success');
-        showGitInstructions(data.date);
+        // The success message is now handled in saveData function
+        // Update git status
+        setTimeout(checkGitStatus, 1000);
     } catch (error) {
         showMessage('Error saving activities. Please try again.', 'error');
         console.error('Save error:', error);
@@ -119,23 +120,54 @@ async function handleFormSubmit(event) {
 }
 
 async function saveData(data) {
-    // Save to localStorage (primary storage for GitHub Pages)
-    const allData = JSON.parse(localStorage.getItem('activityTracker') || '[]');
-    
-    // Remove any existing entry for today
-    const today = data.date;
-    const filteredData = allData.filter(entry => entry.date !== today);
-    
-    // Add new entry
-    filteredData.push(data);
-    
-    localStorage.setItem('activityTracker', JSON.stringify(filteredData));
-    
-    // Also try to load existing data from GitHub repository
+    // Save to Flask backend
     try {
-        await loadFromGitHub(data.date);
+        const response = await fetch('/api/save-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                date: data.date,
+                data: data
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log('✅ Data saved to file and committed to git:', result.message);
+            
+            // Show appropriate message based on push status
+            if (result.pushed) {
+                showMessage('Activities saved, committed, and pushed to GitHub! 🚀', 'success');
+            } else if (result.committed) {
+                showMessage('Activities saved and committed! (Push failed - check network)', 'warning');
+            } else {
+                showMessage('Activities saved locally! (Git operations failed)', 'warning');
+            }
+            
+            // Also save to localStorage as backup
+            const allData = JSON.parse(localStorage.getItem('activityTracker') || '[]');
+            const today = data.date;
+            const filteredData = allData.filter(entry => entry.date !== today);
+            filteredData.push(data);
+            localStorage.setItem('activityTracker', JSON.stringify(filteredData));
+            
+            return result;
+        } else {
+            throw new Error(`Server error: ${response.status}`);
+        }
     } catch (error) {
-        console.log('GitHub data not available, using localStorage only');
+        console.error('Flask API error:', error);
+        
+        // Fallback to localStorage only
+        const allData = JSON.parse(localStorage.getItem('activityTracker') || '[]');
+        const today = data.date;
+        const filteredData = allData.filter(entry => entry.date !== today);
+        filteredData.push(data);
+        localStorage.setItem('activityTracker', JSON.stringify(filteredData));
+        
+        throw new Error('Could not save to server, saved to localStorage only');
     }
 }
 
@@ -222,10 +254,18 @@ async function loadSavedData() {
     const today = new Date().toISOString().split('T')[0];
     let todayData = null;
     
-    // Try to load from GitHub repository first
-    todayData = await loadFromGitHub(today);
+    // Try to load from Flask backend first
+    try {
+        const response = await fetch(`/api/get-data/${today}`);
+        if (response.ok) {
+            todayData = await response.json();
+            console.log('✅ Data loaded from Flask backend');
+        }
+    } catch (error) {
+        console.warn('⚠️ Flask backend unavailable, falling back to localStorage');
+    }
     
-    // Fallback to localStorage if GitHub file not found
+    // Fallback to localStorage if Flask fails
     if (!todayData) {
         const allData = JSON.parse(localStorage.getItem('activityTracker') || '[]');
         todayData = allData.find(entry => entry.date === today);
@@ -442,6 +482,52 @@ function getWeeklySummary() {
     });
     
     return summary;
+}
+
+// Check git status and show in UI
+async function checkGitStatus() {
+    try {
+        const response = await fetch('/api/git-status');
+        if (response.ok) {
+            const status = await response.json();
+            showGitStatus(status);
+        }
+    } catch (error) {
+        console.log('Could not check git status:', error);
+    }
+}
+
+// Show git status in UI
+function showGitStatus(status) {
+    // Remove existing status
+    const existingStatus = document.querySelector('.git-status');
+    if (existingStatus) existingStatus.remove();
+    
+    const header = document.querySelector('.header');
+    const statusDiv = document.createElement('div');
+    header.appendChild(statusDiv.firstElementChild);
+}
+
+// Push changes to GitHub
+async function pushToGitHub() {
+    try {
+        showMessage('Pushing to GitHub...', 'info');
+        
+        const response = await fetch('/api/push-to-github', {
+            method: 'POST'
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            showMessage('Successfully pushed to GitHub! 🎉', 'success');
+            setTimeout(checkGitStatus, 1000);
+        } else {
+            const error = await response.json();
+            showMessage(`Push failed: ${error.error}`, 'error');
+        }
+    } catch (error) {
+        showMessage('Push failed: Network error', 'error');
+    }
 }
 
 // Export data function
