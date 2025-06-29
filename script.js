@@ -17,7 +17,7 @@ function initializeApp() {
     form.addEventListener('submit', handleFormSubmit);
     
     // Load saved data if available
-    loadSavedData();
+    // loadSavedData();
 }
 
 function handleCheckboxChange(event) {
