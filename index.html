@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-tasks"></i> Activity Tracker</h1>
+            <p>Track what you've accomplished today</p>
+        </header>
+
+        <main class="main-content">
+            <form id="activityForm" class="activity-form">
+                <div class="activities-grid">
+                    <!-- Identities -->
+                    <!-- Identities -->
+                    <div class="activity-category">
+                        <h3><i class="fas fa-user-circle"></i> Identities</h3>
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="engineering" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Engineering Identity
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="engineering_quantity" min="1" max="100" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="algorithm" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Algorithm Identity
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="algorithm_quantity" min="1" max="100" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="teknokian" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Teknokian Identity
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="teknokian_quantity" min="1" max="100" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="runner" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Runner Identity
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="runner_quantity" min="1" max="100" value="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health -->
+                    <div class="activity-category">
+                        <h3><i class="fas fa-heart"></i> Health</h3>
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="water" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Water
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Liters:</label>
+                                <input type="number" name="water_quantity" min="0.5" max="10" step="0.1" value="2">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="eggs" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Eggs
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="eggs_quantity" min="1" max="20" value="2">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="whey_creatine">
+                                <span class="checkmark"></span>
+                                Whey and Creatine
+                            </label>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="caffeine" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Caffeine Pill
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="caffeine_quantity" min="1" max="10" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="no_fear" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                No Fear
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="no_fear_quantity" min="1" max="10" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="neem_tulsi" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Neem Tulsi Syrup
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="neem_tulsi_quantity" min="1" max="10" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="green_tea" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Green Tea
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="green_tea_quantity" min="1" max="20" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="meals">
+                                <span class="checkmark"></span>
+                                Meals
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Recreations -->
+                    <div class="activity-category">
+                        <h3><i class="fas fa-gamepad"></i> Recreations</h3>
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="sleep" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Sleep
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Hours:</label>
+                                <input type="number" name="sleep_quantity" min="1" max="12" step="0.5" value="8">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="podcast" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Podcast
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="podcast_quantity" min="1" max="20" value="1">
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <label class="activity-label">
+                                <input type="checkbox" name="activity" value="finance" data-has-quantity="true">
+                                <span class="checkmark"></span>
+                                Finance
+                            </label>
+                            <div class="quantity-control hidden">
+                                <label>Amount:</label>
+                                <input type="number" name="finance_quantity" min="1" max="100" value="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-save"></i> Save Activities
+                    </button>
+                    <button type="button" class="clear-btn" onclick="clearForm()">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                </div>
+            </form>
+
+            <div id="summary" class="summary hidden">
+                <h3><i class="fas fa-chart-line"></i> Today's Summary</h3>
+                <div id="summaryContent"></div>
+                <button onclick="showForm()" class="edit-btn">
+                    <i class="fas fa-edit"></i> Edit Activities
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
