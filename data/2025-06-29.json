@@ -1,13 +1,10 @@
 {
   "activities": [
-    "engineering",
-    "algorithm",
-    "teknokian",
-    "podcast"
+    "engineering"
   ],
   "quantities": {
-    "engineering": 1,
-    "algorithm": 3,
+    "engineering": 6,
+    "algorithm": 1,
     "teknokian": 1,
     "runner": 1,
     "water": 2,
@@ -21,5 +18,5 @@
     "finance": 1
   },
   "date": "2025-06-29",
-  "timestamp": "2025-06-29T19:16:56.049Z"
+  "timestamp": "2025-06-29T19:17:43.504Z"
 }
