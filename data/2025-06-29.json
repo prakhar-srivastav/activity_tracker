@@ -1,11 +1,9 @@
 {
   "activities": [
-    "engineering",
-    "runner",
-    "water"
+    "eggs"
   ],
   "quantities": {
-    "engineering": 6,
+    "engineering": 1,
     "algorithm": 1,
     "teknokian": 1,
     "runner": 1,
@@ -20,5 +18,5 @@
     "finance": 1
   },
   "date": "2025-06-29",
-  "timestamp": "2025-06-29T19:20:01.294Z"
+  "timestamp": "2025-06-29T19:23:12.137Z"
 }
