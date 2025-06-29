@@ -1,6 +1,7 @@
 {
   "activities": [
-    "engineering"
+    "engineering",
+    "podcast"
   ],
   "quantities": {
     "engineering": 1,
@@ -18,5 +19,5 @@
     "finance": 1
   },
   "date": "2025-06-29",
-  "timestamp": "2025-06-29T19:12:38.754Z"
+  "timestamp": "2025-06-29T19:12:49.646Z"
 }
