@@ -179,6 +179,99 @@ def push_to_github():
             'output': e.stderr
         }), 500
 
+@app.route('/analytics')
+def analytics():
+    """Serve the analytics page"""
+    return render_template('analytics.html')
+
+@app.route('/api/analytics-data', methods=['POST'])
+def get_analytics_data():
+    """Get aggregated analytics data for a date range"""
+    try:
+        data = request.get_json()
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        
+        if not start_date or not end_date:
+            return jsonify({'error': 'Missing start_date or end_date'}), 400
+        
+        # Get all data files in the date range
+        from datetime import datetime, timedelta
+        
+        start = datetime.strptime(start_date, '%Y-%m-%d')
+        end = datetime.strptime(end_date, '%Y-%m-%d')
+        
+        analytics_data = {
+            'daily_data': [],
+            'aggregated_activities': {},
+            'aggregated_quantities': {},
+            'total_days': 0,
+            'date_range': f"{start_date} to {end_date}"
+        }
+        
+        current_date = start
+        while current_date <= end:
+            date_str = current_date.strftime('%Y-%m-%d')
+            filename = f"{date_str}.json"
+            filepath = os.path.join(DATA_DIR, filename)
+            
+            if os.path.exists(filepath):
+                with open(filepath, 'r') as f:
+                    day_data = json.load(f)
+                    analytics_data['daily_data'].append(day_data)
+                    analytics_data['total_days'] += 1
+                    
+                    # Aggregate activities (count how many days each activity was done)
+                    for activity in day_data.get('activities', []):
+                        if activity in analytics_data['aggregated_activities']:
+                            analytics_data['aggregated_activities'][activity] += 1
+                        else:
+                            analytics_data['aggregated_activities'][activity] = 1
+                    
+                    # Aggregate quantities (sum up quantities across days)
+                    for key, value in day_data.get('quantities', {}).items():
+                        if key in analytics_data['aggregated_quantities']:
+                            analytics_data['aggregated_quantities'][key] += value
+                        else:
+                            analytics_data['aggregated_quantities'][key] = value
+            
+            current_date += timedelta(days=1)
+        
+        # Calculate averages
+        analytics_data['average_quantities'] = {}
+        if analytics_data['total_days'] > 0:
+            for key, total in analytics_data['aggregated_quantities'].items():
+                analytics_data['average_quantities'][key] = round(total / analytics_data['total_days'], 2)
+        
+        return jsonify(analytics_data)
+        
+    except Exception as e:
+        logger.error(f"Error getting analytics data: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/available-dates')
+def get_available_dates():
+    """Get all available data dates"""
+    try:
+        dates = []
+        for filename in os.listdir(DATA_DIR):
+            if filename.endswith('.json'):
+                date_str = filename.replace('.json', '')
+                dates.append(date_str)
+        
+        dates.sort()
+        
+        return jsonify({
+            'dates': dates,
+            'earliest': dates[0] if dates else None,
+            'latest': dates[-1] if dates else None,
+            'total_days': len(dates)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting available dates: {e}")
+        return jsonify({'error': str(e)}), 500
+
 # Serve static files
 @app.route('/static/<path:filename>')
 def static_files(filename):

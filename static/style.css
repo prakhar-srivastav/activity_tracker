@@ -450,6 +450,26 @@ body {
     animation: fadeIn 0.5s ease forwards;
 }
 
+/* Navigation links */
+.nav-links {
+    margin-top: 10px;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    display: inline-block;
+    transition: background 0.3s;
+    font-size: 14px;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {
