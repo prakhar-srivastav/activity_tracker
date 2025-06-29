@@ -1,0 +1,5 @@
+{
+  "description": "This folder contains daily activity tracking data",
+  "format": "Each file is named YYYY-MM-DD.json and contains the day's activity data",
+  "lastUpdated": "2025-06-30"
+}

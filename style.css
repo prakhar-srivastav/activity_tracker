@@ -303,6 +303,62 @@ body {
     font-size: 1.1rem;
 }
 
+/* Git Instructions styles */
+.git-instructions {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #667eea;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.git-instructions h4 {
+    color: #495057;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+.git-instructions ol {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.git-instructions li {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+.git-instructions code {
+    background: #f1f3f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #d73a49;
+    font-size: 0.9rem;
+}
+
+.close-instructions {
+    background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.close-instructions:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(81, 207, 102, 0.3);
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
@@ -396,5 +452,31 @@ body {
     text-align: center;
     font-weight: 600;
     box-shadow: 0 5px 15px rgba(81, 207, 102, 0.3);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Warning message */
+.warning-message {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Error message */
+.error-message {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
     animation: fadeIn 0.5s ease forwards;
 }
