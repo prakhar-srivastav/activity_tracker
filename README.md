@@ -100,6 +100,7 @@ A beautiful, modern activity tracker web application that automatically saves yo
 | `Ctrl/Cmd + E` | Toggle Manual Edit Mode |
 | `Ctrl/Cmd + Q` | Quick Input Modal |
 | `Ctrl/Cmd + 1/2/3` | Apply Presets |
+| `Ctrl/Cmd + Shift + S` | Save and Exit Edit Mode |
 | `Ctrl/Cmd + S` | Save Activities |
 | `Ctrl/Cmd + R` | Clear Form |
 

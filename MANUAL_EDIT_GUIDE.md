@@ -45,8 +45,8 @@ Pre-configured activity patterns for common scenarios:
 1. Click "Manual Edit Mode" button
 2. All activities become visible with quantity inputs
 3. Set exact values for each activity
-4. Click "Save Activities" when done
-5. Exit edit mode by clicking "Exit Edit Mode"
+4. Click "Save Activities" when done OR click "Exit Edit Mode" (will prompt to save)
+5. Exit edit mode by clicking "Exit Edit Mode" or use `Ctrl/Cmd + Shift + S` for quick save and exit
 
 ### Using Presets
 1. Enter Manual Edit Mode
@@ -77,6 +77,7 @@ Pre-configured activity patterns for common scenarios:
 | `Ctrl/Cmd + 1` | Apply Productive Day preset (edit mode) |
 | `Ctrl/Cmd + 2` | Apply Light Day preset (edit mode) |
 | `Ctrl/Cmd + 3` | Apply Health Focus preset (edit mode) |
+| `Ctrl/Cmd + Shift + S` | Save and Exit Edit Mode (edit mode) |
 | `Escape` | Close Quick Input Modal |
 | `Ctrl/Cmd + S` | Save Activities |
 | `Ctrl/Cmd + R` | Clear Form |

@@ -27,17 +27,18 @@ def save_data():
     try:
         data = request.get_json()
         date = data.get('date')
+        override = data.get('override', False)  
         activity_data = data.get('data')
-        
+        # Validate input
         if not date or not activity_data:
             return jsonify({'error': 'Missing date or data'}), 400
         
         # Save to JSON file with additive updates
         filename = f"{date}.json"
         filepath = os.path.join(DATA_DIR, filename)
-        
+
         # Load existing data if file exists, otherwise start with empty structure
-        if os.path.exists(filepath):
+        if os.path.exists(filepath) and not override:
             with open(filepath, 'r') as f:
                 existing_data = json.load(f)
         else:

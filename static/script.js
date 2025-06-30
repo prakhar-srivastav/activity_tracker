@@ -119,7 +119,7 @@ async function handleFormSubmit(event) {
     }
 }
 
-async function saveData(data) {
+async function saveData(data, override = false) {
     // Save to Flask backend
     try {
         const response = await fetch('/api/save-data', {
@@ -129,7 +129,8 @@ async function saveData(data) {
             },
             body: JSON.stringify({
                 date: data.date,
-                data: data
+                data: data,
+                override: override
             })
         });
         
@@ -428,16 +429,61 @@ function toggleEditMode() {
         
         showMessage('Edit Mode enabled! Set exact values for each activity.', 'info');
     } else {
-        // Disable edit mode
-        button.innerHTML = '<i class="fas fa-edit"></i> Manual Edit Mode';
-        button.classList.remove('active');
-        header.classList.remove('active');
-        form.classList.remove('edit-mode');
+        // Save current data before exiting edit mode
+        const hasSelectedActivities = document.querySelectorAll('input[type="checkbox"]:checked').length > 0;
         
-        // Reset to normal mode behavior
-        resetToNormalMode();
+        if (hasSelectedActivities) {
+            // Ask user if they want to save before exiting
+            const shouldSave = confirm('You have selected activities. Do you want to save them before exiting edit mode?\n\nClick OK to save and exit, or Cancel to exit without saving.');
+            
+            if (shouldSave) {
+                // Collect form data
+                const formData = new FormData(document.getElementById('activityForm'));
+                const activities = [];
+                const quantities = {};
+                
+                // Collect selected activities
+                formData.getAll('activity').forEach(activity => {
+                    activities.push(activity);
+                });
+                
+                // Collect quantities
+                for (let [key, value] of formData.entries()) {
+                    if (key.endsWith('_quantity')) {
+                        const activityName = key.replace('_quantity', '');
+                        quantities[activityName] = parseFloat(value);
+                    }
+                }
+                
+                if (activities.length > 0) {
+                    // Save data
+                    const data = {
+                        activities,
+                        quantities,
+                        date: new Date().toISOString().split('T')[0],
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    // Show saving message
+                    showMessage('Saving data before exiting edit mode...', 'info');
+                    
+                    // Save data and then exit edit mode
+                    saveData(data, override = true).then(() => {
+                        // After successful save, exit edit mode
+                        exitEditModeAfterSave(button, header, form, true);
+                    }).catch((error) => {
+                        console.error('Save error:', error);
+                        showMessage('Error saving data. Exiting edit mode anyway.', 'warning');
+                        exitEditModeAfterSave(button, header, form, false);
+                    });
+                    
+                    return; // Don't continue with immediate exit
+                }
+            }
+        }
         
-        showMessage('Edit Mode disabled. Normal mode restored.', 'success');
+        // If no activities selected or user chose not to save, exit immediately
+        exitEditModeAfterSave(button, header, form, false);
     }
 }
 
@@ -478,6 +524,27 @@ function resetToNormalMode() {
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.value = '0';
     });
+}
+
+// Helper function to exit edit mode after saving
+function exitEditModeAfterSave(button, header, form, wasSaved = false) {
+    // Disable edit mode UI
+    button.innerHTML = '<i class="fas fa-edit"></i> Manual Edit Mode';
+    button.classList.remove('active');
+    header.classList.remove('active');
+    form.classList.remove('edit-mode');
+    
+    // Reset to normal mode behavior
+    resetToNormalMode();
+    
+    // Update global state
+    isEditMode = false;
+    
+    if (wasSaved) {
+        showMessage('Data saved and pushed to GitHub! Edit mode disabled.', 'success');
+    } else {
+        showMessage('Edit Mode disabled. Normal mode restored.', 'success');
+    }
 }
 
 function setManualValues(activityData) {
@@ -661,6 +728,56 @@ document.addEventListener('keydown', function(event) {
     if (isEditMode && (event.ctrlKey || event.metaKey) && event.key === 'q') {
         event.preventDefault();
         openQuickValueModal();
+    }
+    
+    // Ctrl/Cmd + Shift + S to save and exit edit mode
+    if (isEditMode && (event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'S') {
+        event.preventDefault();
+        // Force save by simulating clicking exit edit mode with selected activities
+        const hasSelectedActivities = document.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+        if (hasSelectedActivities) {
+            // Directly trigger save without confirmation dialog
+            const formData = new FormData(document.getElementById('activityForm'));
+            const activities = [];
+            const quantities = {};
+            
+            // Collect selected activities
+            formData.getAll('activity').forEach(activity => {
+                activities.push(activity);
+            });
+            
+            // Collect quantities
+            for (let [key, value] of formData.entries()) {
+                if (key.endsWith('_quantity')) {
+                    const activityName = key.replace('_quantity', '');
+                    quantities[activityName] = parseFloat(value);
+                }
+            }
+            
+            if (activities.length > 0) {
+                // Save data
+                const data = {
+                    activities,
+                    quantities,
+                    date: new Date().toISOString().split('T')[0],
+                    timestamp: new Date().toISOString()
+                };
+                
+                showMessage('Quick save and exit...', 'info');
+                
+                saveData(data).then(() => {
+                    const button = document.querySelector('.edit-mode-btn');
+                    const header = document.getElementById('editModeHeader');
+                    const form = document.getElementById('activityForm');
+                    exitEditModeAfterSave(button, header, form, true);
+                }).catch((error) => {
+                    console.error('Save error:', error);
+                    showMessage('Error saving data.', 'error');
+                });
+            }
+        } else {
+            showMessage('No activities selected to save.', 'warning');
+        }
     }
 });
 
