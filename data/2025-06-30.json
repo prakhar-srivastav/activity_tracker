@@ -1,9 +1,10 @@
 {
   "activities": [
+    "engineering",
     "sleep"
   ],
   "quantities": {
-    "engineering": 0,
+    "engineering": 4,
     "algorithm": 0,
     "teknokian": 0,
     "runner": 0,
@@ -14,10 +15,10 @@
     "neem_tulsi": 0,
     "green_tea": 0,
     "meals": 0,
-    "sleep": 4,
+    "sleep": 8,
     "podcast": 0,
     "finance": 0
   },
   "date": "2025-06-30",
-  "timestamp": "2025-06-30T11:21:47.611990"
+  "timestamp": "2025-06-30T19:05:25.367235"
 }
