@@ -5,11 +5,15 @@ A beautiful, modern activity tracker web application that automatically saves yo
 ## 🚀 Features
 
 - **Daily Activity Tracking**: Track various activities with quantities
+- **Manual Edit Mode**: Set exact values with presets and quick input
 - **Auto-Save to Git**: Automatically saves data to JSON files and commits to Git
 - **Beautiful UI**: Modern, responsive design with animations
 - **Data Persistence**: Both local storage and file-based storage
 - **Git Integration**: Automatic commits and push functionality
 - **Data History**: View and load previous days' data
+- **Quick Presets**: Pre-configured activity patterns for common scenarios
+- **Rapid Input**: Comma-separated value input for fast data entry
+- **Analytics Dashboard**: View trends and patterns in your activity data
 
 ## 📋 Categories
 
@@ -72,11 +76,34 @@ A beautiful, modern activity tracker web application that automatically saves yo
 
 ## 💻 Usage
 
+### Basic Usage
 1. **Select Activities**: Check boxes for completed activities
 2. **Set Quantities**: Enter amounts for quantifiable activities
 3. **Save**: Click "Save Activities" to store and commit data
-4. **View History**: Click "View History" to see previous days
-5. **Push to GitHub**: Use the Git status panel to push changes
+
+### Manual Edit Mode
+1. **Activate**: Click "Manual Edit Mode" or press `Ctrl/Cmd + E`
+2. **Set Values**: Use presets, quick input, or manual entry
+3. **Apply**: Values are set automatically
+4. **Save**: Click "Save Activities" when done
+
+### Quick Features
+- **Presets**: Choose from Productive Day, Light Day, or Health Focus
+- **Quick Input**: Enter comma-separated values for rapid data entry
+- **Export**: Copy current values to clipboard for reuse
+- **Keyboard Shortcuts**: Use hotkeys for faster workflow
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + E` | Toggle Manual Edit Mode |
+| `Ctrl/Cmd + Q` | Quick Input Modal |
+| `Ctrl/Cmd + 1/2/3` | Apply Presets |
+| `Ctrl/Cmd + S` | Save Activities |
+| `Ctrl/Cmd + R` | Clear Form |
+
+📖 **Detailed Guide**: See [MANUAL_EDIT_GUIDE.md](MANUAL_EDIT_GUIDE.md) for comprehensive usage instructions.
 
 ## 🌐 GitHub Deployment
 

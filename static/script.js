@@ -271,10 +271,16 @@ async function loadSavedData() {
         todayData = allData.find(entry => entry.date === today);
     }
     
+    // Always start with cleared form by default
+    // Users can manually load saved data if they want to edit
+    clearForm();
+    
+    // Optional: Show a message if there's saved data available
     if (todayData) {
-        // Pre-fill the form with today's data
-        populateForm(todayData);
-        showSummary(todayData);
+        showMessage('Found saved data for today. Click "Load Saved Data" if you want to edit previous entries.', 'info');
+        // Store the saved data for potential loading later
+        window.savedTodayData = todayData;
+        showLoadDataButton();
     }
 }
 
@@ -358,9 +364,9 @@ function clearForm() {
         handleCheckboxChange({ target: checkbox });
     });
     
-    // Reset all quantity inputs
+    // Reset all quantity inputs to 0 (cleared state)
     document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.value = input.getAttribute('value') || '1';
+        input.value = '0';
     });
     
     // Hide summary
@@ -368,70 +374,242 @@ function clearForm() {
     document.getElementById('activityForm').style.display = 'block';
 }
 
-function getActivityDisplayName(activity) {
-    const displayNames = {
-        'engineering': 'Engineering Identity',
-        'algorithm': 'Algorithm Identity',
-        'teknokian': 'Teknokian Identity',
-        'runner': 'Runner Identity',
-        'water': 'Water',
-        'eggs': 'Eggs',
-        'whey_creatine': 'Whey and Creatine',
-        'caffeine': 'Caffeine Pill',
-        'no_fear': 'No Fear',
-        'neem_tulsi': 'Neem Tulsi Syrup',
-        'green_tea': 'Green Tea',
-        'meals': 'Meals',
-        'sleep': 'Sleep',
-        'podcast': 'Podcast',
-        'finance': 'Finance'
-    };
-    
-    return displayNames[activity] || activity;
+// Function to load saved data for editing
+function loadSavedDataForEditing() {
+    if (window.savedTodayData) {
+        populateForm(window.savedTodayData);
+        showSummary(window.savedTodayData);
+        hideLoadDataButton();
+    }
 }
 
-function getActivityUnit(activity) {
-    const units = {
-        'engineering': 'amount',
-        'algorithm': 'amount',
-        'teknokian': 'amount',
-        'runner': 'amount',
-        'water': 'L',
-        'eggs': 'eggs',
-        'caffeine': 'pills',
-        'no_fear': 'amount',
-        'neem_tulsi': 'amount',
-        'green_tea': 'cups',
-        'sleep': 'hours',
-        'podcast': 'episodes',
-        'finance': 'amount'
-    };
-    
-    return units[activity] || 'times';
+// Function to show/hide load data button
+function showLoadDataButton() {
+    let loadBtn = document.getElementById('loadDataBtn');
+    if (!loadBtn) {
+        loadBtn = document.createElement('button');
+        loadBtn.id = 'loadDataBtn';
+        loadBtn.type = 'button';
+        loadBtn.className = 'edit-btn';
+        loadBtn.innerHTML = '<i class="fas fa-upload"></i> Load Saved Data';
+        loadBtn.onclick = loadSavedDataForEditing;
+        
+        const formActions = document.querySelector('.form-actions');
+        formActions.appendChild(loadBtn);
+    }
+    loadBtn.style.display = 'flex';
 }
 
-function showMessage(message, type = 'success') {
-    // Remove existing messages
-    const existingMessages = document.querySelectorAll('.message');
-    existingMessages.forEach(msg => msg.remove());
+function hideLoadDataButton() {
+    const loadBtn = document.getElementById('loadDataBtn');
+    if (loadBtn) {
+        loadBtn.style.display = 'none';
+    }
+}
+
+// Manual Edit Mode functionality
+let isEditMode = false;
+
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const button = document.querySelector('.edit-mode-btn');
+    const header = document.getElementById('editModeHeader');
+    const form = document.getElementById('activityForm');
     
-    // Create new message
-    const messageElement = document.createElement('div');
-    messageElement.className = `message ${type}-message`;
-    messageElement.textContent = message;
+    if (isEditMode) {
+        // Enable edit mode
+        button.innerHTML = '<i class="fas fa-times"></i> Exit Edit Mode';
+        button.classList.add('active');
+        header.classList.add('active');
+        form.classList.add('edit-mode');
+        
+        // Show all quantity controls and check all activities
+        showAllQuantityControls();
+        
+        showMessage('Edit Mode enabled! Set exact values for each activity.', 'info');
+    } else {
+        // Disable edit mode
+        button.innerHTML = '<i class="fas fa-edit"></i> Manual Edit Mode';
+        button.classList.remove('active');
+        header.classList.remove('active');
+        form.classList.remove('edit-mode');
+        
+        // Reset to normal mode behavior
+        resetToNormalMode();
+        
+        showMessage('Edit Mode disabled. Normal mode restored.', 'success');
+    }
+}
+
+function showAllQuantityControls() {
+    // Check all checkboxes and show their quantity controls
+    document.querySelectorAll('input[type="checkbox"][data-has-quantity="true"]').forEach(checkbox => {
+        checkbox.checked = true;
+        const activityItem = checkbox.closest('.activity-item');
+        const quantityControl = activityItem.querySelector('.quantity-control');
+        
+        if (quantityControl) {
+            quantityControl.classList.remove('hidden');
+            quantityControl.style.display = 'block';
+        }
+        
+        // Add visual feedback
+        activityItem.style.background = 'linear-gradient(135deg, #fff9e6 0%, #fff3d0 100%)';
+        activityItem.style.borderColor = '#ffd93d';
+    });
     
-    // Insert at the top of main content
-    const mainContent = document.querySelector('.main-content');
-    mainContent.insertBefore(messageElement, mainContent.firstChild);
+    // Also check activities without quantities
+    document.querySelectorAll('input[type="checkbox"]:not([data-has-quantity])').forEach(checkbox => {
+        checkbox.checked = true;
+        const activityItem = checkbox.closest('.activity-item');
+        activityItem.style.background = 'linear-gradient(135deg, #fff9e6 0%, #fff3d0 100%)';
+        activityItem.style.borderColor = '#ffd93d';
+    });
+}
+
+function resetToNormalMode() {
+    // Uncheck all checkboxes and hide quantity controls
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+        handleCheckboxChange({ target: checkbox });
+    });
     
-    // Auto-remove after 3 seconds
-    setTimeout(() => {
-        messageElement.style.opacity = '0';
-        messageElement.style.transform = 'translateY(-20px)';
+    // Reset all quantity inputs to 0
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '0';
+    });
+}
+
+function setManualValues(activityData) {
+    // Function to programmatically set specific values
+    // Usage: setManualValues({engineering: 5, water: 3.5, sleep: 8})
+    
+    Object.entries(activityData).forEach(([activity, value]) => {
+        const checkbox = document.querySelector(`input[value="${activity}"]`);
+        const quantityInput = document.querySelector(`input[name="${activity}_quantity"]`);
+        
+        if (checkbox) {
+            checkbox.checked = true;
+            handleCheckboxChange({ target: checkbox });
+            
+            if (quantityInput && value !== undefined) {
+                quantityInput.value = value;
+            }
+        }
+    });
+    
+    showMessage(`Set values for ${Object.keys(activityData).length} activities`, 'success');
+}
+
+// Quick preset functions for common scenarios
+function applyPreset(presetName) {
+    const presets = {
+        'productive_day': {
+            engineering: 8,
+            algorithm: 3,
+            water: 4,
+            eggs: 6,
+            caffeine: 2,
+            green_tea: 3,
+            meals: 3,
+            sleep: 8,
+            whey_creatine: true
+        },
+        'light_day': {
+            engineering: 2,
+            water: 2,
+            eggs: 2,
+            meals: 2,
+            sleep: 9,
+            podcast: 2
+        },
+        'health_focus': {
+            water: 5,
+            eggs: 8,
+            green_tea: 4,
+            meals: 4,
+            sleep: 8,
+            runner: 1,
+            whey_creatine: true
+        }
+    };
+    
+    const preset = presets[presetName];
+    if (preset) {
+        // Enable edit mode if not already enabled
+        if (!isEditMode) {
+            toggleEditMode();
+        }
+        
+        // Clear current values
+        resetToNormalMode();
+        
+        // Apply preset values
         setTimeout(() => {
-            messageElement.remove();
-        }, 300);
-    }, 3000);
+            Object.entries(preset).forEach(([activity, value]) => {
+                const checkbox = document.querySelector(`input[value="${activity}"]`);
+                const quantityInput = document.querySelector(`input[name="${activity}_quantity"]`);
+                
+                if (checkbox) {
+                    checkbox.checked = true;
+                    const activityItem = checkbox.closest('.activity-item');
+                    const quantityControl = activityItem.querySelector('.quantity-control');
+                    
+                    if (quantityControl) {
+                        quantityControl.classList.remove('hidden');
+                        quantityControl.style.display = 'block';
+                    }
+                    
+                    if (quantityInput && typeof value === 'number') {
+                        quantityInput.value = value;
+                    }
+                    
+                    // Add visual feedback
+                    activityItem.style.background = 'linear-gradient(135deg, #fff9e6 0%, #fff3d0 100%)';
+                    activityItem.style.borderColor = '#ffd93d';
+                }
+            });
+            
+            showMessage(`Applied "${presetName}" preset successfully!`, 'success');
+        }, 100);
+    }
+}
+
+function applySelectedPreset() {
+    const select = document.getElementById('presetSelect');
+    const selectedPreset = select.value;
+    
+    if (selectedPreset) {
+        applyPreset(selectedPreset);
+        // Reset the select to placeholder
+        setTimeout(() => {
+            select.value = '';
+        }, 500);
+    }
+}
+
+function clearAllValues() {
+    // Clear all quantity inputs while keeping checkboxes checked
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '0';
+    });
+    
+    showMessage('All values cleared to 0', 'info');
+}
+
+function setAllToValue(value) {
+    // Utility function to set all activities to a specific value
+    if (!isEditMode) {
+        toggleEditMode();
+        setTimeout(() => setAllToValue(value), 200);
+        return;
+    }
+    
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = value;
+    });
+    
+    showMessage(`Set all values to ${value}`, 'success');
 }
 
 // Add keyboard shortcuts
@@ -450,14 +628,158 @@ document.addEventListener('keydown', function(event) {
         event.preventDefault();
         clearForm();
     }
+    
+    // Ctrl/Cmd + E to toggle edit mode
+    if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
+        event.preventDefault();
+        toggleEditMode();
+    }
+    
+    // Ctrl/Cmd + 1/2/3 for quick presets (only in edit mode)
+    if (isEditMode && (event.ctrlKey || event.metaKey)) {
+        if (event.key === '1') {
+            event.preventDefault();
+            applyPreset('productive_day');
+        } else if (event.key === '2') {
+            event.preventDefault();
+            applyPreset('light_day');
+        } else if (event.key === '3') {
+            event.preventDefault();
+            applyPreset('health_focus');
+        }
+    }
+    
+    // Escape key to close modal
+    if (event.key === 'Escape') {
+        const modal = document.getElementById('quickValueModal');
+        if (!modal.classList.contains('hidden')) {
+            closeQuickValueModal();
+        }
+    }
+    
+    // Ctrl/Cmd + Q for quick input (only in edit mode)
+    if (isEditMode && (event.ctrlKey || event.metaKey) && event.key === 'q') {
+        event.preventDefault();
+        openQuickValueModal();
+    }
 });
 
-// Add smooth scrolling for better UX
-function smoothScrollTo(element) {
-    element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+// Quick Value Modal functions
+function openQuickValueModal() {
+    if (!isEditMode) {
+        toggleEditMode();
+        setTimeout(openQuickValueModal, 200);
+        return;
+    }
+    
+    const modal = document.getElementById('quickValueModal');
+    modal.classList.remove('hidden');
+    
+    // Focus on the textarea
+    setTimeout(() => {
+        document.getElementById('quickValueInput').focus();
+    }, 100);
+}
+
+function closeQuickValueModal() {
+    const modal = document.getElementById('quickValueModal');
+    modal.classList.add('hidden');
+    
+    // Clear the input
+    document.getElementById('quickValueInput').value = '';
+}
+
+function applyQuickValues() {
+    const input = document.getElementById('quickValueInput').value.trim();
+    
+    if (!input) {
+        showMessage('Please enter some values!', 'error');
+        return;
+    }
+    
+    const values = input.split(',').map(v => v.trim());
+    const activities = [
+        'engineering', 'algorithm', 'teknokian', 'runner',
+        'water', 'eggs', 'caffeine', 'no_fear', 'neem_tulsi',
+        'green_tea', 'meals', 'sleep', 'podcast', 'finance'
+    ];
+    
+    // Clear current values first
+    resetToNormalMode();
+    
+    // Apply the values
+    setTimeout(() => {
+        let appliedCount = 0;
+        
+        values.forEach((value, index) => {
+            if (index < activities.length && value !== '' && value !== '0') {
+                const activity = activities[index];
+                const checkbox = document.querySelector(`input[value="${activity}"]`);
+                const quantityInput = document.querySelector(`input[name="${activity}_quantity"]`);
+                
+                if (checkbox) {
+                    checkbox.checked = true;
+                    const activityItem = checkbox.closest('.activity-item');
+                    const quantityControl = activityItem.querySelector('.quantity-control');
+                    
+                    if (quantityControl) {
+                        quantityControl.classList.remove('hidden');
+                        quantityControl.style.display = 'block';
+                    }
+                    
+                    if (quantityInput) {
+                        const numValue = parseFloat(value);
+                        if (!isNaN(numValue)) {
+                            quantityInput.value = numValue;
+                        } else {
+                            quantityInput.value = 1; // Default for non-numeric values
+                        }
+                    }
+                    
+                    // Add visual feedback
+                    activityItem.style.background = 'linear-gradient(135deg, #fff9e6 0%, #fff3d0 100%)';
+                    activityItem.style.borderColor = '#ffd93d';
+                    appliedCount++;
+                }
+            }
+        });
+        
+        closeQuickValueModal();
+        showMessage(`Applied values to ${appliedCount} activities!`, 'success');
+    }, 100);
+}
+
+// Export current values as comma-separated string (for copying)
+function exportCurrentValues() {
+    const activities = [
+        'engineering', 'algorithm', 'teknokian', 'runner',
+        'water', 'eggs', 'caffeine', 'no_fear', 'neem_tulsi',
+        'green_tea', 'meals', 'sleep', 'podcast', 'finance'
+    ];
+    
+    const values = activities.map(activity => {
+        const checkbox = document.querySelector(`input[value="${activity}"]`);
+        const quantityInput = document.querySelector(`input[name="${activity}_quantity"]`);
+        
+        if (checkbox && checkbox.checked) {
+            return quantityInput ? quantityInput.value : '1';
+        }
+        return '0';
     });
+    
+    const valueString = values.join(',');
+    
+    // Copy to clipboard if possible
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(valueString).then(() => {
+            showMessage('Current values copied to clipboard!', 'success');
+        });
+    } else {
+        // Fallback: show in modal
+        alert(`Current values:\n${valueString}\n\nCopy this text manually.`);
+    }
+    
+    return valueString;
 }
 
 // Weekly/Monthly summary function (bonus feature)
@@ -540,4 +862,70 @@ function exportData() {
     link.href = URL.createObjectURL(dataBlob);
     link.download = `activity-tracker-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
+}
+
+function getActivityDisplayName(activity) {
+    const displayNames = {
+        'engineering': 'Engineering Identity',
+        'algorithm': 'Algorithm Identity',
+        'teknokian': 'Teknokian Identity',
+        'runner': 'Runner Identity',
+        'water': 'Water',
+        'eggs': 'Eggs',
+        'whey_creatine': 'Whey and Creatine',
+        'caffeine': 'Caffeine Pill',
+        'no_fear': 'No Fear',
+        'neem_tulsi': 'Neem Tulsi Syrup',
+        'green_tea': 'Green Tea',
+        'meals': 'Meals',
+        'sleep': 'Sleep',
+        'podcast': 'Podcast',
+        'finance': 'Finance'
+    };
+    
+    return displayNames[activity] || activity;
+}
+
+function getActivityUnit(activity) {
+    const units = {
+        'engineering': 'amount',
+        'algorithm': 'amount',
+        'teknokian': 'amount',
+        'runner': 'amount',
+        'water': 'L',
+        'eggs': 'eggs',
+        'caffeine': 'pills',
+        'no_fear': 'amount',
+        'neem_tulsi': 'amount',
+        'green_tea': 'cups',
+        'sleep': 'hours',
+        'podcast': 'episodes',
+        'finance': 'amount'
+    };
+    
+    return units[activity] || 'times';
+}
+
+function showMessage(message, type = 'success') {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('.message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // Create new message
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${type}-message`;
+    messageElement.textContent = message;
+    
+    // Insert at the top of main content
+    const mainContent = document.querySelector('.main-content');
+    mainContent.insertBefore(messageElement, mainContent.firstChild);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        messageElement.style.opacity = '0';
+        messageElement.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            messageElement.remove();
+        }, 300);
+    }, 3000);
 }
