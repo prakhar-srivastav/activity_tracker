@@ -4,6 +4,7 @@
     "eggs",
     "engineering",
     "meals",
+    "neem_tulsi",
     "no_fear",
     "sleep",
     "water"
@@ -17,7 +18,7 @@
     "eggs": 11,
     "caffeine": 0,
     "no_fear": 0,
-    "neem_tulsi": 0,
+    "neem_tulsi": 2,
     "green_tea": 0,
     "meals": 2,
     "sleep": 24,
@@ -25,5 +26,5 @@
     "finance": 0
   },
   "date": "2025-06-30",
-  "timestamp": "2025-06-30T14:05:39.263904"
+  "timestamp": "2025-06-30T14:09:25.190142"
 }
