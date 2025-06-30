@@ -18,7 +18,7 @@
   ],
   "quantities": {
     "engineering": 5,
-    "algorithm": 3,
+    "algorithm": 0,
     "teknokian": 0,
     "runner": 0,
     "water": 3,
@@ -33,5 +33,5 @@
     "finance": 0
   },
   "date": "2025-06-30",
-  "timestamp": "2025-06-30T20:46:23.241394"
+  "timestamp": "2025-06-30T15:22:04.259571"
 }
