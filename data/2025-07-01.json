@@ -1,6 +1,8 @@
 {
   "activities": [
+    "meals",
     "neem_tulsi",
+    "no_fear",
     "sleep"
   ],
   "quantities": {
@@ -11,7 +13,7 @@
     "water": 0,
     "eggs": 0,
     "caffeine": 0,
-    "no_fear": 0,
+    "no_fear": 3,
     "neem_tulsi": 1,
     "green_tea": 0,
     "meals": 0,
@@ -20,5 +22,5 @@
     "finance": 0
   },
   "date": "2025-07-01",
-  "timestamp": "2025-07-01T03:26:59.420495"
+  "timestamp": "2025-07-01T09:52:41.660297"
 }
