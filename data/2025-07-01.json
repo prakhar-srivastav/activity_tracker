@@ -13,14 +13,14 @@
     "water": 0,
     "eggs": 0,
     "caffeine": 0,
-    "no_fear": 3,
-    "neem_tulsi": 1,
+    "no_fear": 6,
+    "neem_tulsi": 2,
     "green_tea": 0,
-    "meals": 0,
-    "sleep": 8,
+    "meals": 1,
+    "sleep": 16,
     "podcast": 0,
     "finance": 0
   },
   "date": "2025-07-01",
-  "timestamp": "2025-07-01T09:52:41.660297"
+  "timestamp": "2025-07-01T09:53:25.499986"
 }
