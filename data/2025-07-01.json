@@ -1,5 +1,6 @@
 {
   "activities": [
+    "neem_tulsi",
     "sleep"
   ],
   "quantities": {
@@ -11,7 +12,7 @@
     "eggs": 0,
     "caffeine": 0,
     "no_fear": 0,
-    "neem_tulsi": 0,
+    "neem_tulsi": 1,
     "green_tea": 0,
     "meals": 0,
     "sleep": 8,
@@ -19,5 +20,5 @@
     "finance": 0
   },
   "date": "2025-07-01",
-  "timestamp": "2025-07-01T03:26:40.067300"
+  "timestamp": "2025-07-01T03:26:59.420495"
 }
