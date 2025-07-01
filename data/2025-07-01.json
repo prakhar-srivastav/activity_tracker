@@ -18,13 +18,13 @@
   "quantities": {
     "engineering": 0,
     "algorithm": 0,
-    "teknokian": 1,
+    "teknokian": 2,
     "runner": 0,
     "water": 0,
     "eggs": 0,
     "caffeine": 0,
     "no_fear": 6,
-    "neem_tulsi": 1,
+    "neem_tulsi": 2,
     "green_tea": 0,
     "meals": 1,
     "sleep": 8,
@@ -32,5 +32,5 @@
     "finance": 0
   },
   "date": "2025-07-01",
-  "timestamp": "2025-07-01T13:09:15.508850"
+  "timestamp": "2025-07-01T14:56:46.118743"
 }
