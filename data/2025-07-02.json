@@ -4,6 +4,7 @@
     "engineering",
     "meals",
     "neem_tulsi",
+    "no_fear",
     "runner",
     "sleep",
     "teknokian"
@@ -16,14 +17,14 @@
     "water": 0,
     "eggs": 0,
     "caffeine": 1,
-    "no_fear": 0,
+    "no_fear": 1,
     "neem_tulsi": 1,
     "green_tea": 0,
-    "meals": 1,
-    "sleep": 2,
+    "meals": 2,
+    "sleep": 6,
     "podcast": 0,
     "finance": 0
   },
   "date": "2025-07-02",
-  "timestamp": "2025-07-02T13:01:54.626087"
+  "timestamp": "2025-07-02T17:32:28.191721"
 }
