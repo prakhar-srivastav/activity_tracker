@@ -182,8 +182,18 @@ def push_to_github():
 
 @app.route('/analytics')
 def analytics():
-    """Serve the analytics page"""
+    """Serve the daily analytics page"""
     return render_template('analytics.html')
+
+@app.route('/analytics/daily')
+def daily_analytics():
+    """Serve the daily analytics page"""
+    return render_template('analytics.html')
+
+@app.route('/analytics/weekly')
+def weekly_analytics():
+    """Serve the weekly analytics page"""
+    return render_template('weekly-analytics.html')
 
 @app.route('/api/analytics-data', methods=['POST'])
 def get_analytics_data():
