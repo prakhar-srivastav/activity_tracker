@@ -2,7 +2,8 @@
   "activities": [
     "engineering",
     "meals",
-    "no_fear"
+    "no_fear",
+    "sleep"
   ],
   "quantities": {
     "engineering": 7,
@@ -16,10 +17,10 @@
     "neem_tulsi": 0,
     "green_tea": 0,
     "meals": 1,
-    "sleep": 0,
+    "sleep": 4,
     "podcast": 0,
     "finance": 0
   },
   "date": "2025-07-03",
-  "timestamp": "2025-07-03T07:00:14.482742"
+  "timestamp": "2025-07-03T13:41:58.070548"
 }
