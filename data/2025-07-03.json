@@ -1,6 +1,7 @@
 {
   "activities": [
-    "engineering"
+    "engineering",
+    "no_fear"
   ],
   "quantities": {
     "engineering": 5,
@@ -10,7 +11,7 @@
     "water": 0,
     "eggs": 0,
     "caffeine": 0,
-    "no_fear": 0,
+    "no_fear": 1,
     "neem_tulsi": 0,
     "green_tea": 0,
     "meals": 0,
@@ -19,5 +20,5 @@
     "finance": 0
   },
   "date": "2025-07-03",
-  "timestamp": "2025-07-03T03:03:53.240154"
+  "timestamp": "2025-07-03T04:15:26.100339"
 }
